@@ -18,3 +18,7 @@ echo
 echo "Compile the composite"
 composedb composite:compile gitcoin-passport-vc-composite.json src/__generated__/definition.js --ceramic-url=http://localhost:7007
 
+
+echo
+echo "Compile the composite to json"
+composedb composite:compile gitcoin-passport-vc-composite.json gitcoin-passport-vc-runtime.json --ceramic-url=http://localhost:7007

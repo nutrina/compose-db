@@ -32,11 +32,17 @@ compose.setDID(did);
 
 console.log("Authenticated and set did in compose client");
 
-for (let i = 0; i < 20; i++) {
+const existing_ids = [
+  "kjzl6kcym7w8y6nxdhyfuxolqh16c4w6jv7qc7q2zttchbviu8h0d2wg3g64tyv",
+  "kjzl6kcym7w8y6nxdhyfuxolqh16c4w6jv7qc7q2zttchbviu8h0d2wg3g64tyv",
+  "kjzl6kcym7w8y66d9z61x1hrszuyjal9ubwcdxltxozq9gp9x4s8eeqct1lbw5h",
+];
+for (let i = 0; i < existing_ids.length; i++) {
   const m = `mutation {
-            createGitcoinPassportStamp(input: {
+            updateGitcoinPassportStamp(input: {
+              id: "${existing_ids[i]}"
               content: {
-                issuer: "gerald the tester ${i}"
+                issuer: "UPDATED gerald the tester ${i}"
                 issuanceDate: "2023-10-06T11:38:27.102Z"
                 expirationDate: "2024-10-06T11:38:27.102Z"
                 type: ["VerifiableCredential"]
