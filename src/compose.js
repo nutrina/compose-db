@@ -36,6 +36,7 @@ for (let i = 0; i < 20; i++) {
   const m = `mutation {
             createGitcoinPassportStamp(input: {
               content: {
+                _context: ["hello context"]
                 issuer: "gerald the tester ${i}"
                 issuanceDate: "2023-10-06T11:38:27.102Z"
                 expirationDate: "2024-10-06T11:38:27.102Z"
@@ -61,6 +62,53 @@ for (let i = 0; i < 20; i++) {
                   proofValue: "0x9f295b82d0262607a97e14d978e57ca45734ca4d3e9c0a8e215a9d535d73b18d4a8c828154a6ceb25bf2bc79d57bb144ac1ce9096ff7e39660cd275ed13cf6ce1b"
                   verificationMethod: "did:ethr:0xd6fc34345bc8c8e5659a35bed9629d5558d48c4e#controller"
                   created: "2023-09-11T12:31:45.103Z"
+
+                  eip712Domain: {
+                    domain: { name: "VerifiableCredential" }
+                    primaryType: "Document"
+                    types: {
+                      Context: [
+                        { name: "customInfo", type: "string" }
+                        { name: "hash", type: "string" }
+                        { name: "metaPointer", type: "string" }
+                        { name: "provider", type: "string" }
+                      ],
+                      CredentialStatus: [
+                        { name: "id", type: "string" }
+                        { name: "type", type: "string" }
+                        { name: "statusPurpose", type: "string" }
+                        { name: "statusListIndex", type: "string" }
+                        { name: "statusListCredential", type: "string" }
+                      ],
+                      CredentialSubject: [
+                        { name: "id", type: "string" }
+                        { name: "provider", type: "string" }
+                        { name: "metaPointer", type: "string" }
+                        { name: "customInfo", type: "CustomInfo" }
+                        { name: "hash", type: "string" }
+                        { name: "@context", type: "Context[]" }
+                      ],
+                      Document: [
+                        { name: "@context", type: "string[]" }
+                        { name: "type", type: "string[]" }
+                        { name: "issuer", type: "string" }
+                        { name: "issuanceDate", type: "string" }
+                        { name: "expirationDate", type: "string" }
+                        { name: "credentialSubject", type: "CredentialSubject" }
+                        { name: "proof", type: "Proof" }
+                        { name: "credentialStatus", type: "CredentialStatus" }
+                      ],
+                      EIP712Domain: [{ name: "name", type: "string" }],
+                      Proof: [
+                        { name: "@context", type: "string" }
+                        { name: "type", type: "string" }
+                        { name: "proofPurpose", type: "string" }
+                        { name: "proofValue", type: "string" }
+                        { name: "verificationMethod", type: "string" }
+                        { name: "created", type: "string" }
+                      ]
+                    }
+                  }
                 }
               }
             })
