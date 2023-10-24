@@ -1,8 +1,4 @@
 
-
-# CERAMIC_URL=http://localhost:7007 
-CERAMIC_URL=https://ceramic-gitcoin-staging.hirenodes.io
-
 echo
 echo "Creating did"
 composedb did:from-private-key ${PRIVAKE_KEY}
