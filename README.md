@@ -20,10 +20,17 @@ export CERAMIC_URL=http://localhost:7007
 - run: `./script.sh`
 - run: `./run_graphql.sh` or `composedb graphql:server --ceramic-url=http://127.0.0.1:7007 --graphiql gitcoin-passport-vc-composite.json --did-private-key=${PRIVAKE_KEY} --port=5005`
 
+## Updates
+- in addition to the schema for the VC, I have added a schema for a VC wrapper. This holds additional metadata, that is not included in the schema like `isDeleted`, `isRevoked`
+- to check this out please see the following files:
+  - `script_wrapper.sh` - will set up the wrapper model
+  - `run_graphql_wrpper.sh` - will run a graphql server for the wrapper
+  - `src/create_stamps_wrapper.js` - an example of how to create and wrap VCs
 
 # Example query:
-Please find other queries in the `./src/` folder:
+Please find other queries in the `./src/` folder.
 
+## For the VC
 ```graphql
 query MyQuery {
   gitcoinPassportStampIndex(
@@ -89,5 +96,30 @@ fragment GitcoinPassportStampGitcoinPassportVcProofFragment on GitcoinPassportSt
   type
   verificationMethod
   _context
+}
+```
+
+## For the wrapped VC
+```graphql
+query MyQuery {
+  gitcoinPassportStampWrapperIndex(first: 10) {
+    edges {
+      node {
+        id
+        isDeleted
+        isRevoked
+        vc {
+          _context
+          credentialSubject {
+            _id
+            hash
+            metaPointer
+            provider
+          }
+        }
+        vcId
+      }
+    }
+  }
 }
 ```

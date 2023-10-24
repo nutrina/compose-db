@@ -5,7 +5,7 @@ import { getResolver } from "key-did-resolver";
 import { readFileSync } from "fs";
 import { fromString } from "uint8arrays/from-string";
 import { CeramicClient } from "@ceramicnetwork/http-client";
-import { definition } from "./__generated__/definition.js";
+import { definition } from "./__generated__/definition_wrapper.js";
 
 const CERAMIC_URL = "http://localhost:7007";
 const seed = "b9ff51d1498c20f4555a1558395e76e572bee4c2e774f57dbd7b585ad3b3265b";
@@ -130,6 +130,38 @@ for (let i = 0; i < 20; i++) {
   console.log("Query result:", data);
   console.log("Query result:", data.data);
   console.log("Query result:", data.data.createGitcoinPassportStamp);
+
+  const vc_id = data.data.createGitcoinPassportStamp.document.id;
+  console.log("Creating wrapper for:", vc_id);
+
+  const createWrapper = `mutation {
+    createGitcoinPassportStampWrapper(
+      input: {content: {vcId: "${vc_id}", isDeleted: false, isRevoked: false}}
+    ) {
+      clientMutationId
+      document {
+        id
+        isDeleted
+        isRevoked
+        vc {
+          _context
+          id
+          expirationDate
+          issuanceDate
+          issuer
+          proof {
+            _context
+          }
+        }
+      }
+    }
+  }
+   `;
+
+  const wrapperData = await compose.executeQuery(createWrapper);
+  console.log("Query result:", wrapperData);
+  console.log("Query result:", wrapperData.data);
+  console.log("Query result:", wrapperData.data.createGitcoinPassportStampWrapper);
 }
 
 console.log("DONE");

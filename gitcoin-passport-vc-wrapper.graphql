@@ -10,7 +10,7 @@ type GitcoinPassportStampWrapper
     accountRelation: LIST
     description: "A gitcoin passport stamp with a provider and hash"
   )
-  @createIndex(fields: [{ path: "isDeleted" }]) {
+  @createIndex(fields: [{ path: "isDeleted" }]) 
   @createIndex(fields: [{ path: "isRevoked" }]) {
   vcId: ID!
   isDeleted: Boolean
