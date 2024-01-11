@@ -45,12 +45,10 @@ for (let i = 0; i < 20; i++) {
                 credentialSubject: {
                   _id: "credentialSubject ${i}"
                   provider: "provider ${i}"
-                  metaPointer: "http://passport.gitcoin.co/provider_${i}"
                   hash: "this_is_hash_${i}"
 
                   _context: {
                     hash: "https://schema.org/Text"
-                    metaPointer: "https://schema.org/URL"
                     provider: "https://schema.org/Text"
                   }
                 }

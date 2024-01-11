@@ -1,0 +1,18 @@
+{
+  "type": ["VerifiableCredential", "GitcoinPassportProbabilisticStamp"],
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://credentials.passport.gitcoin.co/"
+  ],
+  "issuer": "...",
+  "issuanceDate": "2023-10-23T13:32:52.935Z",
+  "expirationDate": "2024-01-21T13:32:52.935Z",
+  "credentialSubject": {
+    "id": "did:pkh:eip155:1:0x0000000000000000000000000000000000000000",
+    "hash": "v0.0.0:12121212121212121212121212121212121212",
+    "provider": "MyProvider",
+    "probability": 200,
+    "@context": []
+  },
+  "proof": {}
+}

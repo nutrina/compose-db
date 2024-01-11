@@ -1,16 +1,27 @@
 type GitcoinPassportStamp
   @loadModel(
-    id: "kjzl6hvfrbw6c7qwuncazqr1z04a824op7h6lx05aoigqo40aitil11ix0edrs2"
+    id: "kjzl6hvfrbw6c7lz8lo3w2hi6vp8qb885538tqhml0q6dtbnbx69u26sqmrkr34"
   ) {
   id: ID!
 }
 
-type GitcoinPassportStampWrapper
+interface GitcoinPassportStampWrapperInterface
+  @createModel(
+    accountRelation: LIST
+    description: "Interface for GitcoinPassportStampWrapper"
+  ) {
+  vcId: ID!
+  isDeleted: Boolean
+  isRevoked: Boolean
+  # vc: GitcoinPassportStamp! @relationDocument(property: "vcId")
+}
+
+type GitcoinPassportStampWrapper implements GitcoinPassportStampWrapperInterface
   @createModel(
     accountRelation: LIST
     description: "A gitcoin passport stamp with a provider and hash"
   )
-  @createIndex(fields: [{ path: "isDeleted" }]) 
+  @createIndex(fields: [{ path: "isDeleted" }])
   @createIndex(fields: [{ path: "isRevoked" }]) {
   vcId: ID!
   isDeleted: Boolean

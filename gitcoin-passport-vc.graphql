@@ -1,5 +1,4 @@
 # #### Interfaces ####
-
 interface VerifiableCredentialSubject
   @createModel(description: "A verifiable credential subject interface") {
   _id: String! @string(minLength: 1, maxLength: 1024)
@@ -18,75 +17,31 @@ interface VerifiableCredential
   expirationDate: DateTime!
 }
 
-# #### Top Level - Claim (Attestation / VC) ####
-
-interface GitcoinPassportStamp
-  @createModel(description: "A verifiable claim interface") {
-  # controller: DID! @documentAccount
-  # recipient: DID! @accountReference
-  controller: String! @string(minLength: 1, maxLength: 1024)
-  recipient: String! @string(minLength: 1, maxLength: 1024)
-}
-
-type PassportVerifiableClaimBinary implements GitcoinPassportStamp
+interface GitcoinPassportStampWrapperInterface
   @createModel(
     accountRelation: LIST
-    description: "A gitcoin passport stamp with a provider and hash"
+    description: "Interface for GitcoinPassportStampWrapper"
   ) {
-  # controller: DID! @documentAccount
-  controller: String! @string(minLength: 1, maxLength: 1024)
-  recipient: String! @string(minLength: 1, maxLength: 1024)
+  vcID: StreamID! @documentReference(model: "VerifiableCredential")
+  vc: VerifiableCredential! @relationDocument(property: "vcID")
+
+  isDeleted: Boolean
+  isRevoked: Boolean
 }
 
-type PassportVerifiableClaimProbabilistic implements GitcoinPassportStamp
+type GitcoinPassportStampTestWrapper implements GitcoinPassportStampWrapperInterface
   @createModel(
     accountRelation: LIST
-    description: "A gitcoin passport stamp with a provider and hash"
-  )
-  # @createIndex(fields: [{ path: "controller" }]) 
-  @createIndex(fields: [{ path: ["controller"] }]) 
-  # controller: DID! @documentAccount
-  {
-  controller: String! @string(minLength: 1, maxLength: 1024)
-  recipient: String! @string(minLength: 1, maxLength: 1024)
-  attestation: GitcoinPassportVerifiableCredentialBinary!
+    description: "Interface for GitcoinPassportStampWrapper"
+  ) {
+  vcID: StreamID! @documentReference(model: "VerifiableCredential")
+  vc: VerifiableCredential! @relationDocument(property: "vcID")
+
+  isDeleted: Boolean
+  isRevoked: Boolean
 }
 
-# #### Passport Stamp ####
-
-type GitcoinPassportVcCredentialSubjectContext {
-  hash: String! @string(minLength: 1, maxLength: 1024)
-  metaPointer: String! @string(minLength: 1, maxLength: 1024)
-  provider: String! @string(minLength: 1, maxLength: 1024)
-}
-
-type GitcoinPassportVcCredentialSubject implements VerifiableCredentialSubject {
-  _id: String! @string(minLength: 1, maxLength: 1024)
-  provider: String! @string(minLength: 1, maxLength: 1024)
-  metaPointer: String! @string(minLength: 1, maxLength: 1024)
-  hash: String! @string(minLength: 1, maxLength: 1024)
-  _context: GitcoinPassportVcCredentialSubjectContext!
-}
-
-type GitcoinPassportVerifiableCredentialBinary implements VerifiableCredential {
-  # @createModel(
-  #   accountRelation: LIST
-  #   description: "A gitcoin passport stamp with a provider and hash"
-  # )
-  # @createIndex(fields: [{ path: "issuer" }])
-  # @createIndex(fields: [{ path: "issuanceDate" }])
-  # @createIndex(fields: [{ path: "expirationDate" }]) {
-  _context: [String!]!
-    @string(minLength: 1, maxLength: 1024)
-    @list(maxLength: 1024)
-  type: [String!]! @string(minLength: 1, maxLength: 1024) @list(maxLength: 1024)
-  issuer: String! @string(minLength: 1, maxLength: 1024)
-  issuanceDate: DateTime!
-  expirationDate: DateTime!
-  credentialSubject: GitcoinPassportVcCredentialSubject!
-  proof: GitcoinPassportVcProof!
-}
-
+# #### Create a type for the proof (this will most likely be reused) ####
 type GitcoinPassportVcProof {
   _context: String! @string(minLength: 1, maxLength: 1024)
   type: String! @string(minLength: 1, maxLength: 1024)
@@ -120,4 +75,210 @@ type EIP712DomainTypes {
   Document: [EIP712ValueType] @list(maxLength: 1024)
   EIP712Domain: [EIP712ValueType] @list(maxLength: 1024)
   Proof: [EIP712ValueType] @list(maxLength: 1024)
+}
+############################################################################################
+# #### Implementation of GitcoinPassportStamp (the binary provider based one) ####
+############################################################################################
+# Sample VC
+# {
+#   "type": [
+#     "VerifiableCredential", "GitcoinPassportStamp"
+#   ],
+#   "@context": [
+#     "https://www.w3.org/2018/credentials/v1", "https://credentials.passport.gitcoin.co/"
+#   ],
+#   "issuer": "...",
+#   "issuanceDate": "2023-10-23T13:32:52.935Z",
+#   "expirationDate": "2024-01-21T13:32:52.935Z",
+#   "credentialSubject": {
+#     "id": "did:pkh:eip155:1:0x0000000000000000000000000000000000000000",
+#     "hash": "v0.0.0:12121212121212121212121212121212121212",
+#     "provider": "MyProvider",
+#     "@context": [...]
+#   },
+#   "proof": {...}
+# }
+
+type GitcoinPassportVcCredentialSubjectContext {
+  hash: String! @string(minLength: 1, maxLength: 1024)
+  provider: String! @string(minLength: 1, maxLength: 1024)
+}
+
+type GitcoinPassportVcCredentialSubject implements VerifiableCredentialSubject {
+  _id: String! @string(minLength: 1, maxLength: 1024)
+  provider: String! @string(minLength: 1, maxLength: 1024)
+  hash: String! @string(minLength: 1, maxLength: 1024)
+  _context: GitcoinPassportVcCredentialSubjectContext!
+}
+
+type GitcoinPassportStamp implements VerifiableCredential
+  @createModel(
+    accountRelation: LIST
+    description: "A gitcoin passport stamp with a provider and hash"
+  )
+  @createIndex(fields: [{ path: "issuer" }])
+  @createIndex(fields: [{ path: "issuanceDate" }])
+  @createIndex(fields: [{ path: "expirationDate" }]) {
+  _context: [String!]!
+    @string(minLength: 1, maxLength: 1024)
+    @list(maxLength: 1024)
+  type: [String!]! @string(minLength: 1, maxLength: 1024) @list(maxLength: 1024)
+  issuer: String! @string(minLength: 1, maxLength: 1024)
+  issuanceDate: DateTime!
+  expirationDate: DateTime!
+  credentialSubject: GitcoinPassportVcCredentialSubject!
+  proof: GitcoinPassportVcProof!
+}
+
+type GitcoinPassportStampWrapper implements GitcoinPassportStampWrapperInterface
+  @createModel(
+    accountRelation: LIST
+    description: "A gitcoin passport stamp with a provider and hash"
+  )
+  @createIndex(fields: [{ path: "isDeleted" }])
+  @createIndex(fields: [{ path: "isRevoked" }]) {
+  isDeleted: Boolean
+  isRevoked: Boolean
+  vcID: StreamID! @documentReference(model: "VerifiableCredential")
+  vc: VerifiableCredential! @relationDocument(property: "vcID")
+}
+
+############################################################################################
+# #### Implementation of GitcoinPassportProbabilisticStamp (the binary provider based one) ####
+############################################################################################
+# Sample VC, please note the new `probability` field in credentialSubject
+# The hash will not include the `probability`, as this will be a dynamic field
+# {
+#   "type": [
+#     "VerifiableCredential", "GitcoinPassportProbabilisticStamp"
+#   ],
+#   "@context": [
+#     "https://www.w3.org/2018/credentials/v1", "https://credentials.passport.gitcoin.co/"
+#   ],
+#   "issuer": "...",
+#   "issuanceDate": "2023-10-23T13:32:52.935Z",
+#   "expirationDate": "2024-01-21T13:32:52.935Z",
+#   "credentialSubject": {
+#     "id": "did:pkh:eip155:1:0x0000000000000000000000000000000000000000",
+#     "hash": "v0.0.0:12121212121212121212121212121212121212",
+#     "provider": "MyProvider",
+#     "probability": 200,
+#     "@context": [...]
+#   },
+#   "proof": {...}
+# }
+
+type GitcoinPassportProbabilisticStampCredentialSubjectContext {
+  hash: String! @string(minLength: 1, maxLength: 1024)
+  provider: String! @string(minLength: 1, maxLength: 1024)
+  probability: String! @string(minLength: 1, maxLength: 1024)
+}
+
+type GitcoinPassportProbabilisticStampCredentialSubject implements VerifiableCredentialSubject {
+  _id: String! @string(minLength: 1, maxLength: 1024)
+  provider: String! @string(minLength: 1, maxLength: 1024)
+  hash: String! @string(minLength: 1, maxLength: 1024)
+  probability: Int! @int(min: 0, max: 256)
+  _context: GitcoinPassportProbabilisticStampCredentialSubjectContext!
+}
+
+type GitcoinPassportProbabilisticStamp implements VerifiableCredential
+  @createModel(
+    accountRelation: LIST
+    description: "A gitcoin passport stamp with a provider, hash and probability from 0..256"
+  )
+  @createIndex(fields: [{ path: "issuer" }])
+  @createIndex(fields: [{ path: "issuanceDate" }])
+  @createIndex(fields: [{ path: "expirationDate" }]) {
+  _context: [String!]!
+    @string(minLength: 1, maxLength: 1024)
+    @list(maxLength: 1024)
+  type: [String!]! @string(minLength: 1, maxLength: 1024) @list(maxLength: 1024)
+  issuer: String! @string(minLength: 1, maxLength: 1024)
+  issuanceDate: DateTime!
+  expirationDate: DateTime!
+  credentialSubject: GitcoinPassportProbabilisticStampCredentialSubject!
+  proof: GitcoinPassportVcProof!
+}
+
+type GitcoinPassportProbabilisticStampWrapper implements GitcoinPassportStampWrapperInterface
+  @createModel(
+    accountRelation: LIST
+    description: "A gitcoin passport stamp with a provider and hash"
+  )
+  @createIndex(fields: [{ path: "isDeleted" }])
+  @createIndex(fields: [{ path: "isRevoked" }]) {
+  isDeleted: Boolean
+  isRevoked: Boolean
+  vcID: StreamID! @documentReference(model: "VerifiableCredential")
+  vc: VerifiableCredential! @relationDocument(property: "vcID")
+}
+
+############################################################################################
+# #### Implementation of GitcoinPassportMembershipStamp (attests the membership in a group) ####
+############################################################################################
+# A gitcoin passport stamp that attests the membership in a given group (identified by scorerId).
+# TODO: we might want to include more group info here, or maybe a scorer can have several groups ...
+# {
+#   "type": [
+#     "VerifiableCredential", "GitcoinPassportMembershipStamp"
+#   ],
+#   "@context": [
+#     "https://www.w3.org/2018/credentials/v1", "https://credentials.passport.gitcoin.co/"
+#   ],
+#   "issuer": "...",
+#   "issuanceDate": "2023-10-23T13:32:52.935Z",
+#   "expirationDate": "2024-01-21T13:32:52.935Z",
+#   "credentialSubject": {
+#     "id": "did:pkh:eip155:1:0x0000000000000000000000000000000000000000",
+#     "hash": "v0.0.0:12121212121212121212121212121212121212",
+#     "scorerId": 123,
+#     "@context": [...]
+#   },
+#   "proof": {...}
+# }
+type GitcoinPassportMembershipStampCredentialSubjectContext {
+  hash: String! @string(minLength: 1, maxLength: 1024)
+  scorerId: String! @string(minLength: 1, maxLength: 1024)
+}
+
+type GitcoinPassportMembershipStampCredentialSubject implements VerifiableCredentialSubject {
+  _id: String! @string(minLength: 1, maxLength: 1024)
+  provider: String! @string(minLength: 1, maxLength: 1024)
+  hash: String! @string(minLength: 1, maxLength: 1024)
+  scorerId: Int! @int
+  _context: GitcoinPassportMembershipStampCredentialSubjectContext!
+}
+
+type GitcoinPassportMembershipStamp implements VerifiableCredential
+  @createModel(
+    accountRelation: LIST
+    description: "A gitcoin passport stamp that attests the membership in a given group (identified by scorerId)"
+  )
+  @createIndex(fields: [{ path: "issuer" }])
+  @createIndex(fields: [{ path: "issuanceDate" }])
+  @createIndex(fields: [{ path: "expirationDate" }]) {
+  _context: [String!]!
+    @string(minLength: 1, maxLength: 1024)
+    @list(maxLength: 1024)
+  type: [String!]! @string(minLength: 1, maxLength: 1024) @list(maxLength: 1024)
+  issuer: String! @string(minLength: 1, maxLength: 1024)
+  issuanceDate: DateTime!
+  expirationDate: DateTime!
+  credentialSubject: GitcoinPassportMembershipStampCredentialSubject!
+  proof: GitcoinPassportVcProof!
+}
+
+type GitcoinPassportMembershipStampWrapper implements GitcoinPassportStampWrapperInterface
+  @createModel(
+    accountRelation: LIST
+    description: "A gitcoin passport stamp with a provider and hash"
+  )
+  @createIndex(fields: [{ path: "isDeleted" }])
+  @createIndex(fields: [{ path: "isRevoked" }]) {
+  isDeleted: Boolean
+  isRevoked: Boolean
+
+  vcID: StreamID! @documentReference(model: "VerifiableCredential")
+  vc: VerifiableCredential! @relationDocument(property: "vcID")
 }
