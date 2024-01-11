@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-01-11T11:47:56.383Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="3hD-PJgWstuKB2aceok2" version="22.1.18" type="github">
+<mxfile host="app.diagrams.net" modified="2024-01-11T12:04:44.467Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="1Jw6ozW_y8Xn5BGVqqgk" version="22.1.18" type="github">
   <diagram name="Page-1" id="BcgfTJ0X8TKIs5s7FbS6">
-    <mxGraphModel dx="7544" dy="6815" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4186" dy="5746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -47,7 +47,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="VoOq1-psez8wTUffjacl-22" value="&lt;h1&gt;&lt;div style=&quot;color: rgb(204, 204, 204); background-color: rgb(31, 31, 31); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-weight: normal; font-size: 12px; line-height: 18px;&quot;&gt;&lt;br&gt;&lt;div&gt;interface VerifiableCredential&lt;/div&gt;&lt;div&gt;  @createModel(description: &lt;span style=&quot;color: #ce9178;&quot;&gt;&quot;A verifiable credential interface&quot;&lt;/span&gt;) {&lt;/div&gt;&lt;div&gt;  &lt;span style=&quot;color: #9cdcfe;&quot;&gt;type:&lt;/span&gt; [String!]! &lt;span style=&quot;color: #569cd6;&quot;&gt;@string&lt;/span&gt;(&lt;span style=&quot;color: #9cdcfe;&quot;&gt;minLength:&lt;/span&gt; &lt;span style=&quot;color: #b5cea8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color: #9cdcfe;&quot;&gt;maxLength:&lt;/span&gt; &lt;span style=&quot;color: #b5cea8;&quot;&gt;1024&lt;/span&gt;) &lt;span style=&quot;color: #569cd6;&quot;&gt;@list&lt;/span&gt;(&lt;span style=&quot;color: #9cdcfe;&quot;&gt;maxLength:&lt;/span&gt; &lt;span style=&quot;color: #b5cea8;&quot;&gt;1024&lt;/span&gt;)&lt;/div&gt;&lt;div&gt;  &lt;span style=&quot;color: #9cdcfe;&quot;&gt;issuer:&lt;/span&gt; String! &lt;span style=&quot;color: #569cd6;&quot;&gt;@string&lt;/span&gt;(&lt;span style=&quot;color: #9cdcfe;&quot;&gt;minLength:&lt;/span&gt; &lt;span style=&quot;color: #b5cea8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color: #9cdcfe;&quot;&gt;maxLength:&lt;/span&gt; &lt;span style=&quot;color: #b5cea8;&quot;&gt;1024&lt;/span&gt;)&lt;/div&gt;&lt;div&gt;  &lt;span style=&quot;color: #9cdcfe;&quot;&gt;issuanceDate:&lt;/span&gt; DateTime!&lt;/div&gt;&lt;div&gt;  &lt;span style=&quot;color: #9cdcfe;&quot;&gt;expirationDate:&lt;/span&gt; DateTime!&lt;/div&gt;&lt;div&gt;}&lt;/div&gt;&lt;/div&gt;&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="-280" y="-2220" width="570" height="180" as="geometry" />
+          <mxGeometry x="70" y="-2180" width="570" height="180" as="geometry" />
         </mxCell>
         <mxCell id="VoOq1-psez8wTUffjacl-24" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmandOne;startArrow=ERmandOne;rounded=0;" parent="1" source="sczQXrT2d03yn4BrVYgI-1" target="VoOq1-psez8wTUffjacl-2" edge="1">
           <mxGeometry width="100" height="100" relative="1" as="geometry">
@@ -220,6 +220,24 @@
           <mxGeometry width="160" relative="1" as="geometry">
             <mxPoint x="1753" y="-1230" as="sourcePoint" />
             <mxPoint x="1873" y="-1310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eA6tpxbq90cXENx7WpxA-1" value="&lt;h1&gt;GitcoinAttestation&lt;/h1&gt;&lt;h1&gt;(interface)&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-350" y="-2340" width="370" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="eA6tpxbq90cXENx7WpxA-2" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;entryX=0.532;entryY=0.982;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sczQXrT2d03yn4BrVYgI-1" target="eA6tpxbq90cXENx7WpxA-1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="175" y="-1590" as="sourcePoint" />
+            <mxPoint x="175" y="-1830" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eA6tpxbq90cXENx7WpxA-4" value="&lt;h1&gt;EASAttestation&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-620" y="-2080" width="370" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="eA6tpxbq90cXENx7WpxA-6" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;" edge="1" parent="1" source="eA6tpxbq90cXENx7WpxA-4" target="eA6tpxbq90cXENx7WpxA-1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="145" y="-1900" as="sourcePoint" />
+            <mxPoint x="-143" y="-2242" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
