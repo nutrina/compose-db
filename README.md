@@ -38,33 +38,58 @@ Please find other queries in the `./src/` folder.
 ## For the VC
 ```graphql
 query MyQuery {
-  gitcoinPassportStampIndex(
-    last: 10
-    filters: {where: {issuer: {equalTo: "gerald the tester 10"}}}
-  ) {
+  gitcoinPassportStampWrapperIndex(first: 100) {
     edges {
       node {
-        credentialSubject {
-          _id
-          hash
-          metaPointer
-          provider
-        }
-        proof {
-          ...GitcoinPassportStampGitcoinPassportVcProofFragment
-        }
-        expirationDate
         id
-        issuanceDate
-        issuer
+        isDeleted
+        isRevoked
+        vc {
+          issuer
+          type
+          expirationDate
+          issuanceDate
+          ... on GitcoinPassportStamp {
+            id
+            credentialSubject {
+              _id
+              hash
+              provider
+            }
+            proof {
+              ...GitcoinPassportVcProofFragment
+            }
+          }
+          ... on GitcoinPassportProbabilisticStamp {
+            id
+            credentialSubject {
+              _id
+              hash
+              provider
+            }
+            proof {
+              ...GitcoinPassportVcProofFragment
+            }
+          }
+        }
       }
     }
   }
 }
 
-fragment GitcoinPassportStampGitcoinPassportVcProofFragment on GitcoinPassportStampGitcoinPassportVcProof {
+fragment GitcoinPassportVcProofFragment on GitcoinPassportVcProof {
+  proofPurpose
+   _context
+  created
+  proofPurpose
+  proofValue
+  type
+  verificationMethod
   eip712Domain {
     primaryType
+    domain {
+      name
+    }
     types {
       Context {
         name
@@ -74,11 +99,7 @@ fragment GitcoinPassportStampGitcoinPassportVcProofFragment on GitcoinPassportSt
         name
         type
       }
-      Proof {
-        type
-        name
-      }
-      EIP712Domain {
+      CredentialSubject {
         name
         type
       }
@@ -86,44 +107,30 @@ fragment GitcoinPassportStampGitcoinPassportVcProofFragment on GitcoinPassportSt
         name
         type
       }
-      CredentialSubject {
+      EIP712Domain {
+        name
+        type
+      }
+      Proof {
         name
         type
       }
     }
-    domain {
-      name
-    }
   }
-  created
-  proofPurpose
-  proofValue
-  type
-  verificationMethod
-  _context
 }
 ```
 
-## For the wrapped VC
+## Mark as deleted ...
 ```graphql
-query MyQuery {
-  gitcoinPassportStampWrapperIndex(first: 10) {
-    edges {
-      node {
-        id
-        isDeleted
-        isRevoked
-        vc {
-          _context
-          credentialSubject {
-            _id
-            hash
-            metaPointer
-            provider
-          }
-        }
-        vcId
-      }
+mutation MyMutation {
+  updateGitcoinPassportStampWrapper(
+    input: {content: {isDeleted: true}, id: "kjzl6kcym7w8y74fzl6mvv7qe12pte1utqri3tt234xaig3wkv35b6pkqz9vsuw"}
+  ) {
+    document {
+      id
+      isDeleted
+      isRevoked
+      vcID
     }
   }
 }

@@ -42,11 +42,14 @@ interface GitcoinPassportStampWrapperInterface
   isRevoked: Boolean
 }
 
-type GitcoinPassportStampTestWrapper implements GitcoinPassportStampWrapperInterface
+type GitcoinPassportStampWrapper implements GitcoinPassportStampWrapperInterface
   @createModel(
     accountRelation: LIST
-    description: "Interface for GitcoinPassportStampWrapper"
-  ) {
+    description: "GitcoinPassportStampWrapper"
+  )
+  @createIndex(fields: [{ path: "vcID" }])
+  @createIndex(fields: [{ path: "isDeleted" }])
+  @createIndex(fields: [{ path: "isRevoked" }]) {
   vcID: StreamID! @documentReference(model: "VerifiableCredential")
   vc: VerifiableCredential! @relationDocument(property: "vcID")
 
@@ -129,7 +132,6 @@ type GitcoinPassportStamp implements VerifiableCredential
     accountRelation: LIST
     description: "A gitcoin passport stamp with a provider and hash"
   )
-  @createIndex(fields: [{ path: "type" }])
   @createIndex(fields: [{ path: "issuer" }])
   @createIndex(fields: [{ path: "issuanceDate" }])
   @createIndex(fields: [{ path: "expirationDate" }]) {
@@ -142,19 +144,6 @@ type GitcoinPassportStamp implements VerifiableCredential
   expirationDate: DateTime!
   credentialSubject: GitcoinPassportVcCredentialSubject!
   proof: GitcoinPassportVcProof!
-}
-
-type GitcoinPassportStampWrapper implements GitcoinPassportStampWrapperInterface
-  @createModel(
-    accountRelation: LIST
-    description: "A gitcoin passport stamp with a provider and hash"
-  )
-  @createIndex(fields: [{ path: "isDeleted" }])
-  @createIndex(fields: [{ path: "isRevoked" }]) {
-  isDeleted: Boolean
-  isRevoked: Boolean
-  vcID: StreamID! @documentReference(model: "VerifiableCredential")
-  vc: VerifiableCredential! @relationDocument(property: "vcID")
 }
 
 ############################################################################################
@@ -215,19 +204,6 @@ type GitcoinPassportProbabilisticStamp implements VerifiableCredential
   proof: GitcoinPassportVcProof!
 }
 
-type GitcoinPassportProbabilisticStampWrapper implements GitcoinPassportStampWrapperInterface
-  @createModel(
-    accountRelation: LIST
-    description: "A gitcoin passport stamp with a provider and hash"
-  )
-  @createIndex(fields: [{ path: "isDeleted" }])
-  @createIndex(fields: [{ path: "isRevoked" }]) {
-  isDeleted: Boolean
-  isRevoked: Boolean
-  vcID: StreamID! @documentReference(model: "VerifiableCredential")
-  vc: VerifiableCredential! @relationDocument(property: "vcID")
-}
-
 ############################################################################################
 # #### Implementation of GitcoinPassportMembershipStamp (attests the membership in a group) ####
 ############################################################################################
@@ -281,18 +257,4 @@ type GitcoinPassportMembershipStamp implements VerifiableCredential
   expirationDate: DateTime!
   credentialSubject: GitcoinPassportMembershipStampCredentialSubject!
   proof: GitcoinPassportVcProof!
-}
-
-type GitcoinPassportMembershipStampWrapper implements GitcoinPassportStampWrapperInterface
-  @createModel(
-    accountRelation: LIST
-    description: "A gitcoin passport stamp with a provider and hash"
-  )
-  @createIndex(fields: [{ path: "isDeleted" }])
-  @createIndex(fields: [{ path: "isRevoked" }]) {
-  isDeleted: Boolean
-  isRevoked: Boolean
-
-  vcID: StreamID! @documentReference(model: "VerifiableCredential")
-  vc: VerifiableCredential! @relationDocument(property: "vcID")
 }
