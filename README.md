@@ -1,3 +1,8 @@
+# Intro
+
+Please find an overview [here](https://app.diagrams.net/#Hnutrina%2Fcompose-db%2Fmain%2FOverview.drawio)
+
+
 # Testing composedb
 
 - install ceramic & compose cli: https://composedb.js.org/docs/0.5.x/set-up-your-environment#installation-using-javascript-package-managers
