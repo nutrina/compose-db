@@ -25,7 +25,7 @@ export CERAMIC_URL=http://localhost:7007
 ```
 
 - run: `./script.sh` to build and deploy the models
-- run graphql client: `./run_graphql.sh` or `composedb graphql:server --ceramic-url=http://127.0.0.1:7007 --graphiql gitcoin-passport-vc-composite.json --did-private-key=${PRIVAKE_KEY} --port=5005`
+- run graphql client: `./run_graphql.sh` or `npx composedb graphql:server --ceramic-url=http://127.0.0.1:7007 --graphiql gitcoin-passport-vc-composite.json --did-private-key=${PRIVAKE_KEY} --port=5005`
 
 # Example query:
 
@@ -132,6 +132,36 @@ mutation MyMutation {
       isDeleted
       isRevoked
       vcID
+    }
+  }
+}
+```
+
+# Query attestations by account
+
+```
+query MyQuery2 {
+  node(id: "did:key:z6MkhAwZdqkt31BvXLJ4rvMkdQfGy6FEiCQvTK2CnPqiF1S4") {
+    id
+    ... on CeramicAccount {
+      gitcoinPassportStampWrapperInterfaceListCount
+      gitcoinPassportStampWrapperInterfaceList(first: 10) {
+        edges {
+          node {
+            isDeleted
+            isRevoked
+            vc {
+              expirationDate
+              issuanceDate
+              issuer
+              type
+              controller {
+                id
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

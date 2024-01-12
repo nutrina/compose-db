@@ -8,7 +8,9 @@ import { CeramicClient } from "@ceramicnetwork/http-client";
 import { definition } from "./__generated__/definition.js";
 
 const CERAMIC_URL = "http://localhost:7007";
-const seed = "b9ff51d1498c20f4555a1558395e76e572bee4c2e774f57dbd7b585ad3b3265b";
+// const seed = "b9ff51d1498c20f4555a1558395e76e572baa4c2e774f57aaa7b585ad3b3265b";
+const seed = "a9ff51d1498c20f4555a1558395e76e572baa4c2e774f57aaa7b585ad3b3265b";
+
 export const compose = new ComposeClient({
   ceramic: CERAMIC_URL,
   definition,
@@ -28,11 +30,15 @@ const authenticate = async () => {
 
 const did = await authenticate();
 
+console.log("============================================");
+console.log(did);
+console.log("============================================");
+
 compose.setDID(did);
 
 console.log("Authenticated and set did in compose client");
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 2; i++) {
   const m = `mutation {
             createGitcoinPassportStamp(input: {
               content: {
@@ -142,7 +148,6 @@ for (let i = 0; i < 20; i++) {
         isDeleted
         isRevoked
         vc {
-          id
           expirationDate
           issuanceDate
           issuer
@@ -155,10 +160,13 @@ for (let i = 0; i < 20; i++) {
   const wrapperData = await compose.executeQuery(createWrapper);
   console.log("Query result:", wrapperData);
   console.log("Query result:", wrapperData.data);
-  console.log("Query result:", wrapperData.data.createGitcoinPassportStampWrapper);
+  console.log(
+    "Query result:",
+    wrapperData.data.createGitcoinPassportStampWrapper
+  );
 }
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 2; i++) {
   const m = `mutation {
             createGitcoinPassportProbabilisticStamp(input: {
               content: {
@@ -255,7 +263,10 @@ for (let i = 0; i < 20; i++) {
 
   console.log("Query result:", data);
   console.log("Query result:", data.data);
-  console.log("Query result:", data.data.createGitcoinPassportProbabilisticStamp);
+  console.log(
+    "Query result:",
+    data.data.createGitcoinPassportProbabilisticStamp
+  );
 
   const vc_id = data.data.createGitcoinPassportProbabilisticStamp.document.id;
   console.log("Creating wrapper for:", vc_id);
@@ -270,7 +281,6 @@ for (let i = 0; i < 20; i++) {
         isDeleted
         isRevoked
         vc {
-          id
           type
           expirationDate
           issuanceDate
@@ -284,8 +294,10 @@ for (let i = 0; i < 20; i++) {
   const wrapperData = await compose.executeQuery(createWrapper);
   console.log("Query result:", wrapperData);
   console.log("Query result:", wrapperData.data);
-  console.log("Query result:", wrapperData.data.createGitcoinPassportStampWrapper);
+  console.log(
+    "Query result:",
+    wrapperData.data.createGitcoinPassportStampWrapper
+  );
 }
-
 
 console.log("DONE");
