@@ -166,3 +166,18 @@ query MyQuery2 {
   }
 }
 ```
+
+# Scoring stamps
+
+```mermaid
+flowchart TD
+    A[Score Stamp] --> B[Validate Stamp]
+    B --> C{Check VC type}
+    C -->|VerifiableCredential, GitcoinPassportStamp| D[score GitcoinPassportStamp]
+    C -->|VerifiableCredential, GitcoinPassportProbabilisticStamp| E[score GitcoinPassportProbabilisticStamp]
+    C -->|VerifiableCredential, GitcoinPassportMembershipStamp| F[score GitcoinPassportMembershipStamp]
+    C -->|other| H[raise error / ignore stamp]
+    D --> G[return]
+    E --> G[return]
+    F --> G[return score]
+```
